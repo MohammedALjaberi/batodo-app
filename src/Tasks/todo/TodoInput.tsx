@@ -66,6 +66,7 @@ const TodoInput = () => {
                 value={newTaskDescription}
                 onChange={(e) => setNewTaskDescription(e.target.value)}
                 rows={3}
+                className="resize-none max-h-24 overflow-y-auto"
               />
               <div className="flex justify-end">
                 <Button onClick={handleAddTask} disabled={!newTaskTitle.trim()}>
