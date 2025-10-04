@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -60,10 +61,11 @@ const TodoInput = () => {
                 onChange={(e) => setNewTaskTitle(e.target.value)}
                 autoFocus
               />
-              <Input
+              <Textarea
                 placeholder="Enter task description (optional)..."
                 value={newTaskDescription}
                 onChange={(e) => setNewTaskDescription(e.target.value)}
+                rows={3}
               />
               <div className="flex justify-end">
                 <Button onClick={handleAddTask} disabled={!newTaskTitle.trim()}>

@@ -19,6 +19,7 @@ import { Edit, Trash2, X } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { useTodos } from "../../store/todo.store";
 import { getStatusColor, getStatusText } from "../../utils/todoHelpers";
+import { Textarea } from "@/components/ui/textarea";
 
 interface TodoItemProps {
   todo: Todo;
@@ -146,6 +147,15 @@ const TodoItem = ({ todo }: TodoItemProps) => {
               <Button
                 variant="outline"
                 onClick={() => {
+                  removeTodo(todo.id);
+                }}
+                className="text-red-500 hover:text-red-500"
+              >
+                Delete
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => {
                   setIsViewDialogOpen(false);
                   setEditTitle(todo.title);
                   setEditDescription(todo.description || "");
@@ -181,12 +191,14 @@ const TodoItem = ({ todo }: TodoItemProps) => {
               onKeyPress={handleKeyPress}
               autoFocus
             />
-            <Input
+            <Textarea
               placeholder="Enter task description (optional)..."
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
               onKeyPress={handleKeyPress}
+              rows={3}
             />
+
             <div className="space-y-2">
               <label className="text-sm font-medium">Status</label>
               <DropdownMenu>
