@@ -14,18 +14,29 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useTodos } from "@/store/todo.store";
-import type { Todo } from "@/types";
 import { getStatusText } from "@/utils/todoHelpers";
 import { Dialog } from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-type FormDataT = {
-  title: string;
-  description: string;
-  status: Todo["status"];
-};
+// validations
+const taskFormSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title is required")
+    .max(50, "Title must be less than 50 characters")
+    .trim(),
+  description: z
+    .string()
+    .max(200, "Description must be less than 200 characters")
+    .optional(),
+  status: z.enum(["TODO", "IN_PROGRESS", "COMPLETED"]),
+});
+
+type FormDataT = z.infer<typeof taskFormSchema>;
 
 const Form = () => {
   const currentTask = useTodos((s) => s.currentTask);
@@ -43,10 +54,11 @@ const Form = () => {
     watch,
     formState: { errors },
   } = useForm<FormDataT>({
+    resolver: zodResolver(taskFormSchema),
     defaultValues: {
-      title: currentTask?.title,
+      title: currentTask?.title || "",
       description: currentTask?.description || "",
-      status: currentTask?.status,
+      status: currentTask?.status || "TODO",
     },
   });
 
@@ -68,7 +80,7 @@ const Form = () => {
         <Input
           id="title"
           placeholder="Enter task title..."
-          {...register("title", { required: "Title is required" })}
+          {...register("title")}
           autoFocus
         />
         {errors.title && (

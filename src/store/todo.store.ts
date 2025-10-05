@@ -11,13 +11,14 @@ interface TodoStore {
   setCurrentTask: (val: TodoStore["currentTask"]) => void;
 
   searchedTodos: Todo[];
-  handleSearchChange: (val: TodoStore["searchTerm"]) => void;
   searchTerm: string;
+  inputValue: string;
+  setInputValue: (value: string) => void;
+  performSearch: (term: string) => void;
 
   addTodo: (task: string, description?: string) => void;
   removeTodo: (id: string) => void;
   updateTodo: (id: string, updates: Partial<Todo>) => void;
-  setSearchTerm: (term: string) => void;
 }
 
 const initialTodos: Todo[] = [
@@ -45,14 +46,19 @@ export const useTodos = create<TodoStore>()(
         todos: initialTodos,
         searchedTodos: [],
         searchTerm: "",
+        inputValue: "",
         currentTask: null,
         openModalFor: null,
-        handleSearchChange: (searchTerm) => {
+
+        setInputValue: (inputValue) => set({ inputValue }),
+
+        performSearch: (searchTerm) => {
           const newTodos = get().todos.filter((todo) =>
             todo.title.toLowerCase().includes(searchTerm.toLowerCase())
           );
           set({ searchTerm, searchedTodos: newTodos });
         },
+
         setOpenModal: (openModalFor) => set({ openModalFor }),
         setCurrentTask: (currentTask) => set({ currentTask }),
         addTodo: (task, description) =>
@@ -80,7 +86,6 @@ export const useTodos = create<TodoStore>()(
             );
             return { todos: newTodos };
           }),
-        setSearchTerm: (term) => set({ searchTerm: term }),
       };
     },
     {
