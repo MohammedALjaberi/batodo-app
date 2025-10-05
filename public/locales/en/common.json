@@ -1,0 +1,44 @@
+{
+  "app": {
+    "title": "My Todo App"
+  },
+  "search": {
+    "placeholder": "Search tasks..."
+  },
+  "buttons": {
+    "addTask": "Add Task",
+    "done": "Done",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
+  "task": {
+    "title": "Title",
+    "description": "Description",
+    "status": "Status",
+    "noDescription": "No description provided"
+  },
+  "status": {
+    "todo": "To Do",
+    "inProgress": "In Progress",
+    "completed": "Completed"
+  },
+  "modal": {
+    "addTask": "Add New Task",
+    "editTask": "Edit Task",
+    "taskDetails": "Task Details"
+  },
+  "placeholder": {
+    "enterTitle": "Enter task title...",
+    "enterDescription": "Enter task description (optional)..."
+  },
+  "validation": {
+    "titleRequired": "Title is required",
+    "titleMaxLength": "Title must be less than 50 characters",
+    "descriptionMaxLength": "Description must be less than 200 characters"
+  },
+  "empty": {
+    "noTasks": "No tasks found.",
+    "getStarted": "Add a new task to get started!"
+  }
+}

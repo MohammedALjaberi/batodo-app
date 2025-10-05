@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +12,7 @@ import { getStatusColor, getStatusText } from "@/utils/todoHelpers";
 import { X } from "lucide-react";
 
 const TaskViewModal = () => {
+  const { t } = useTranslation();
   const currentTask = useTodos((s) => s.currentTask);
   const openModalFor = useTodos((s) => s.openModalFor);
   const setOpenModal = useTodos((s) => s.setOpenModal);
@@ -42,7 +44,7 @@ const TaskViewModal = () => {
     <Dialog open={isOpen} onOpenChange={handleDialogChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Task Details</DialogTitle>
+          <DialogTitle>{t("modal.taskDetails")}</DialogTitle>
           <button
             onClick={handleDialogChange}
             className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
@@ -53,19 +55,23 @@ const TaskViewModal = () => {
         </DialogHeader>
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700">Title</label>
-            <p className="mt-1 text-sm text-gray-900">{currentTask.title}</p>
+            <label className="text-sm font-medium text-muted-foreground">
+              {t("task.title")}
+            </label>
+            <p className="mt-1 text-sm text-foreground">{currentTask.title}</p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">
-              Description
+            <label className="text-sm font-medium text-muted-foreground">
+              {t("task.description")}
             </label>
-            <p className="mt-1 text-sm text-gray-600">
-              {currentTask.description || "No description provided"}
+            <p className="mt-1 text-sm text-muted-foreground">
+              {currentTask.description || t("task.noDescription")}
             </p>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Status</label>
+            <label className="text-sm font-medium text-muted-foreground">
+              {t("task.status")}
+            </label>
             <div className="mt-1">
               <span
                 className={cn(
@@ -83,10 +89,10 @@ const TaskViewModal = () => {
               onClick={handleDelete}
               className="text-red-500 hover:text-red-600"
             >
-              Delete
+              {t("buttons.delete")}
             </Button>
             <Button variant="outline" onClick={handleEdit}>
-              Edit
+              {t("buttons.edit")}
             </Button>
           </div>
         </div>

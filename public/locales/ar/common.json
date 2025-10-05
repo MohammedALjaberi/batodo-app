@@ -1,0 +1,44 @@
+{
+  "app": {
+    "title": "تطبيق المهام"
+  },
+  "search": {
+    "placeholder": "البحث في المهام..."
+  },
+  "buttons": {
+    "addTask": "إضافة مهمة",
+    "done": "تم",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "cancel": "إلغاء"
+  },
+  "task": {
+    "title": "العنوان",
+    "description": "الوصف",
+    "status": "الحالة",
+    "noDescription": "لا يوجد وصف"
+  },
+  "status": {
+    "todo": "للقيام به",
+    "inProgress": "قيد التنفيذ",
+    "completed": "مكتمل"
+  },
+  "modal": {
+    "addTask": "إضافة مهمة جديدة",
+    "editTask": "تعديل المهمة",
+    "taskDetails": "تفاصيل المهمة"
+  },
+  "placeholder": {
+    "enterTitle": "أدخل عنوان المهمة...",
+    "enterDescription": "أدخل وصف المهمة (اختياري)..."
+  },
+  "validation": {
+    "titleRequired": "العنوان مطلوب",
+    "titleMaxLength": "يجب أن يكون العنوان أقل من 50 حرف",
+    "descriptionMaxLength": "يجب أن يكون الوصف أقل من 200 حرف"
+  },
+  "empty": {
+    "noTasks": "لا توجد مهام.",
+    "getStarted": "أضف مهمة جديدة للبدء!"
+  }
+}

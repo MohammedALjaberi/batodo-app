@@ -21,24 +21,27 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useTranslation } from "react-i18next";
 
-// validations
-const taskFormSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(50, "Title must be less than 50 characters")
-    .trim(),
-  description: z
-    .string()
-    .max(200, "Description must be less than 200 characters")
-    .optional(),
-  status: z.enum(["TODO", "IN_PROGRESS", "COMPLETED"]),
-});
+// Create schema function to use translations
+const createTaskFormSchema = (t: any) =>
+  z.object({
+    title: z
+      .string()
+      .min(1, t("validation.titleRequired"))
+      .max(50, t("validation.titleMaxLength"))
+      .trim(),
+    description: z
+      .string()
+      .max(200, t("validation.descriptionMaxLength"))
+      .optional(),
+    status: z.enum(["TODO", "IN_PROGRESS", "COMPLETED"]),
+  });
 
-type FormDataT = z.infer<typeof taskFormSchema>;
+type FormDataT = z.infer<ReturnType<typeof createTaskFormSchema>>;
 
 const Form = () => {
+  const { t } = useTranslation();
   const currentTask = useTodos((s) => s.currentTask);
   const setCurrentTask = useTodos((s) => s.setCurrentTask);
   const addTodo = useTodos((s) => s.addTodo);
@@ -46,6 +49,8 @@ const Form = () => {
   const setOpenModal = useTodos((s) => s.setOpenModal);
   const openModalFor = useTodos((s) => s.openModalFor);
   const isNew = openModalFor === "new";
+
+  const taskFormSchema = createTaskFormSchema(t);
 
   const {
     register,
@@ -76,10 +81,10 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="flex flex-col gap-3">
-        <Label htmlFor="title">Title</Label>
+        <Label htmlFor="title">{t("task.title")}</Label>
         <Input
           id="title"
-          placeholder="Enter task title..."
+          placeholder={t("placeholder.enterTitle")}
           {...register("title")}
           autoFocus
         />
@@ -89,10 +94,10 @@ const Form = () => {
           </span>
         )}
 
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("task.description")}</Label>
         <Textarea
           id="description"
-          placeholder="Enter task description (optional)..."
+          placeholder={t("placeholder.enterDescription")}
           {...register("description")}
           rows={3}
           className="resize-none max-h-24 overflow-y-auto"
@@ -101,7 +106,9 @@ const Form = () => {
 
       {openModalFor === "edit" && (
         <div>
-          <label className="text-sm font-medium">Status</label>
+          <label className="text-sm font-medium text-muted-foreground">
+            {t("task.status")}
+          </label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="w-full justify-start">
@@ -110,15 +117,15 @@ const Form = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuItem onClick={() => setValue("status", "TODO")}>
-                To Do
+                {t("status.todo")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => setValue("status", "IN_PROGRESS")}
               >
-                In Progress
+                {t("status.inProgress")}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => setValue("status", "COMPLETED")}>
-                Completed
+                {t("status.completed")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -126,13 +133,14 @@ const Form = () => {
       )}
 
       <div className="flex justify-end">
-        <Button type="submit">Done</Button>
+        <Button type="submit">{t("buttons.done")}</Button>
       </div>
     </form>
   );
 };
 
 const TaskFormModal = () => {
+  const { t } = useTranslation();
   const openModalFor = useTodos((s) => s.openModalFor);
   const setOpenModal = useTodos((s) => s.setOpenModal);
   const setCurrentTask = useTodos((s) => s.setCurrentTask);
@@ -149,7 +157,9 @@ const TaskFormModal = () => {
       <Dialog open={isOpen} onOpenChange={handleDialogChange}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>{isNew ? "Add Task" : "Edit Task"}</DialogTitle>
+            <DialogTitle>
+              {isNew ? t("modal.addTask") : t("modal.editTask")}
+            </DialogTitle>
             <button
               // onClick={}
               className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"

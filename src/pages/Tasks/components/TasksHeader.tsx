@@ -1,4 +1,5 @@
 import { useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTodos } from "@/store/todo.store";
@@ -7,6 +8,7 @@ import debounce from "lodash.debounce";
 
 const TasksHeader = (props: { className: string }) => {
   const { className } = props;
+  const { t } = useTranslation();
   const setOpenModal = useTodos((s) => s.setOpenModal);
   const inputValue = useTodos((s) => s.inputValue);
   const setInputValue = useTodos((s) => s.setInputValue);
@@ -26,7 +28,7 @@ const TasksHeader = (props: { className: string }) => {
       <div className="space-y-4">
         <div className="flex gap-3">
           <Input
-            placeholder="Search tasks..."
+            placeholder={t("search.placeholder")}
             value={inputValue}
             onChange={(e) => handleInputChange(e.target.value)}
             className="flex-1"
@@ -38,7 +40,7 @@ const TasksHeader = (props: { className: string }) => {
             className="flex items-center gap-2"
           >
             <Plus className="h-4 w-4" />
-            Add Task
+            {t("buttons.addTask")}
           </Button>
         </div>
       </div>

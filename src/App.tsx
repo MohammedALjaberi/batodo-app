@@ -1,13 +1,16 @@
 import TasksPage from "./pages/Tasks/tasks.page";
+import { ThemeProvider } from "@/components/theme-provider";
+import "../i18n.config";
 
 function App() {
   return (
-    <div className="bg-slate-50 min-h-screen">
-      <header className="text-center mb-6">header</header>
-      <main>
-        <TasksPage />
-      </main>
-    </div>
+    <ThemeProvider defaultTheme="light" storageKey="batodo-ui-theme">
+      <div className="bg-background min-h-screen transition-colors">
+        <main>
+          <TasksPage />
+        </main>
+      </div>
+    </ThemeProvider>
   );
 }
 

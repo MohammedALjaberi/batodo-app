@@ -29,22 +29,22 @@ const TaskCardView = ({ todo }: TaskCardViewType) => {
   };
 
   return (
-    <div className="group relative bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50">
+    <div className="group relative bg-card border border-border rounded-lg p-4 cursor-pointer hover:bg-accent/50">
       <div className="flex items-center justify-between" onClick={handleView}>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-medium text-gray-900 truncate">
+          <h3 className="text-sm font-medium text-foreground truncate">
             {todo.title}
           </h3>
         </div>
         <span
           className={cn(
-            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ml-2 transition-transform group-hover:-translate-x-20",
+            "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ml-2 rtl:mr-2 rtl:ml-0 transition-transform group-hover:-translate-x-20 rtl:group-hover:translate-x-20",
             getStatusColor(todo.status)
           )}
         >
           {getStatusText(todo.status)}
         </span>
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 ml-2 absolute right-4">
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 ml-2 rtl:mr-2 rtl:ml-0 absolute top-1/2 -translate-y-1/2 right-4 rtl:left-4 rtl:right-auto rtl:flex-row-reverse">
           <Button
             variant="ghost"
             size="sm"
