@@ -5,7 +5,15 @@ import { v4 as uuidv4 } from "uuid";
 
 interface TodoStore {
   todos: Todo[];
+  openModalFor: "view" | "edit" | "new" | null;
+  currentTask: Todo | null;
+  setOpenModal: (val: TodoStore["openModalFor"]) => void;
+  setCurrentTask: (val: TodoStore["currentTask"]) => void;
+
+  searchedTodos: Todo[];
+  handleSearchChange: (val: TodoStore["searchTerm"]) => void;
   searchTerm: string;
+
   addTodo: (task: string, description?: string) => void;
   removeTodo: (id: string) => void;
   updateTodo: (id: string, updates: Partial<Todo>) => void;
@@ -33,14 +41,24 @@ const initialTodos: Todo[] = [
 export const useTodos = create<TodoStore>()(
   persist<TodoStore>(
     (set, get) => {
-      const getCurrentTodos = () => get().todos;
       return {
         todos: initialTodos,
+        searchedTodos: [],
         searchTerm: "",
+        currentTask: null,
+        openModalFor: null,
+        handleSearchChange: (searchTerm) => {
+          const newTodos = get().todos.filter((todo) =>
+            todo.title.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+          set({ searchTerm, searchedTodos: newTodos });
+        },
+        setOpenModal: (openModalFor) => set({ openModalFor }),
+        setCurrentTask: (currentTask) => set({ currentTask }),
         addTodo: (task, description) =>
           set(() => {
             const newTodos = [
-              ...getCurrentTodos(),
+              ...get().todos,
               {
                 id: uuidv4(),
                 title: task,
@@ -52,12 +70,12 @@ export const useTodos = create<TodoStore>()(
           }),
         removeTodo: (id) =>
           set(() => {
-            const newTodos = getCurrentTodos().filter((todo) => todo.id !== id);
+            const newTodos = get().todos.filter((todo) => todo.id !== id);
             return { todos: newTodos };
           }),
         updateTodo: (id, updates) =>
           set(() => {
-            const newTodos = getCurrentTodos().map((todo) =>
+            const newTodos = get().todos.map((todo) =>
               todo.id === id ? { ...todo, ...updates } : todo
             );
             return { todos: newTodos };

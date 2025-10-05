@@ -1,20 +1,36 @@
-import type { Todo } from "../../../types";
-import { Button } from "../../../components/ui/button";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { useTodos } from "@/store/todo.store";
+import type { Todo } from "@/types";
+import { getStatusColor, getStatusText } from "@/utils/todoHelpers";
 import { Edit, Trash2 } from "lucide-react";
-import { cn } from "../../../lib/utils";
-import { getStatusColor, getStatusText } from "../../../utils/todoHelpers";
 
-type TodoCardProps = {
+type TaskCardViewType = {
   todo: Todo;
-  onView: () => void;
-  onEdit: () => void;
-  onDelete: () => void;
 };
 
-const TodoCard = ({ todo, onView, onEdit, onDelete }: TodoCardProps) => {
+const TaskCardView = ({ todo }: TaskCardViewType) => {
+  const setCurrentTask = useTodos((s) => s.setCurrentTask);
+  const setOpenModal = useTodos((s) => s.setOpenModal);
+  const removeTodo = useTodos((s) => s.removeTodo);
+
+  const handleView = () => {
+    setCurrentTask(todo);
+    setOpenModal("view");
+  };
+
+  const handleDelete = () => {
+    removeTodo(todo.id);
+  };
+
+  const handleUpdate = () => {
+    setCurrentTask(todo);
+    setOpenModal("edit");
+  };
+
   return (
     <div className="group relative bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:bg-gray-50">
-      <div className="flex items-center justify-between" onClick={onView}>
+      <div className="flex items-center justify-between" onClick={handleView}>
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-medium text-gray-900 truncate">
             {todo.title}
@@ -34,7 +50,7 @@ const TodoCard = ({ todo, onView, onEdit, onDelete }: TodoCardProps) => {
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
-              onEdit();
+              handleUpdate();
             }}
             className="h-8 w-8 p-0 hover:bg-gray-100"
           >
@@ -45,7 +61,7 @@ const TodoCard = ({ todo, onView, onEdit, onDelete }: TodoCardProps) => {
             size="sm"
             onClick={(e) => {
               e.stopPropagation();
-              onDelete();
+              handleDelete();
             }}
             className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-600"
           >
@@ -57,4 +73,4 @@ const TodoCard = ({ todo, onView, onEdit, onDelete }: TodoCardProps) => {
   );
 };
 
-export default TodoCard;
+export default TaskCardView;
