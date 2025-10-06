@@ -1,12 +1,12 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import enTranslations from "./public/locales/en/common.json";
-import arTranslations from "./public/locales/ar/common.json";
+import enTranslations from "./src/i18n/en/common.json";
+import arTranslations from "./src/i18n/ar/common.json";
 
 i18n
   .use(LanguageDetector) // Detect user language
-  .use(initReactI18next) // Pass i18n to react-i18next
+  .use(initReactI18next) // Pass i18n to react-iz18next
   .init({
     resources: {
       en: {

@@ -4,18 +4,19 @@ import { type Todo } from "../types";
 import { v4 as uuidv4 } from "uuid";
 
 interface TodoStore {
+  // State
   todos: Todo[];
   openModalFor: "view" | "edit" | "new" | null;
   currentTask: Todo | null;
-  setOpenModal: (val: TodoStore["openModalFor"]) => void;
-  setCurrentTask: (val: TodoStore["currentTask"]) => void;
-
   searchedTodos: Todo[];
   searchTerm: string;
   inputValue: string;
+
+  // Actions
+  setOpenModal: (val: TodoStore["openModalFor"]) => void;
+  setCurrentTask: (val: TodoStore["currentTask"]) => void;
   setInputValue: (value: string) => void;
   performSearch: (term: string) => void;
-
   addTodo: (task: string, description?: string) => void;
   removeTodo: (id: string) => void;
   updateTodo: (id: string, updates: Partial<Todo>) => void;

@@ -24,7 +24,7 @@ import { z } from "zod";
 import { useTranslation } from "react-i18next";
 
 // Create schema function to use translations
-const createTaskFormSchema = (t: any) =>
+const createTaskFormSchema = (t: (key: string) => string) =>
   z.object({
     title: z
       .string()
