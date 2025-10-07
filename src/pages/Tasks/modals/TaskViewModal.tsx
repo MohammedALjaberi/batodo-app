@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { useTodos } from "@/store/todo.store";
 import { getStatusColor, getStatusText } from "@/utils/todoHelpers";
 import { X } from "lucide-react";
+import { format } from "date-fns";
 
 const TaskViewModal = () => {
   const { t } = useTranslation();
@@ -83,6 +84,32 @@ const TaskViewModal = () => {
               </span>
             </div>
           </div>
+
+          {/* Date Range Section */}
+          {(currentTask.startDate || currentTask.endDate) && (
+            <div className="grid grid-cols-2 gap-4">
+              {currentTask.startDate && (
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    {t("task.startDate")}
+                  </label>
+                  <p className="mt-1 text-sm text-foreground">
+                    {format(currentTask.startDate, "PPP")}
+                  </p>
+                </div>
+              )}
+              {currentTask.endDate && (
+                <div>
+                  <label className="text-sm font-medium text-muted-foreground">
+                    {t("task.endDate")}
+                  </label>
+                  <p className="mt-1 text-sm text-foreground">
+                    {format(currentTask.endDate, "PPP")}
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
           <div className="flex justify-end space-x-2">
             <Button
               variant="outline"

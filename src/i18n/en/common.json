@@ -16,6 +16,9 @@
     "title": "Title",
     "description": "Description",
     "status": "Status",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "dateRange": "Date Range",
     "noDescription": "No description provided"
   },
   "status": {
@@ -30,12 +33,15 @@
   },
   "placeholder": {
     "enterTitle": "Enter task title...",
-    "enterDescription": "Enter task description (optional)..."
+    "enterDescription": "Enter task description (optional)...",
+    "selectDate": "Select date",
+    "selectDateRange": "Pick a date range"
   },
   "validation": {
     "titleRequired": "Title is required",
     "titleMaxLength": "Title must be less than 50 characters",
-    "descriptionMaxLength": "Description must be less than 200 characters"
+    "descriptionMaxLength": "Description must be less than 200 characters",
+    "endDateAfterStart": "End date must be after start date"
   },
   "empty": {
     "noTasks": "No tasks found.",

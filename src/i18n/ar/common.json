@@ -16,6 +16,9 @@
     "title": "العنوان",
     "description": "الوصف",
     "status": "الحالة",
+    "startDate": "تاريخ البداية",
+    "endDate": "تاريخ النهاية",
+    "dateRange": "نطاق التاريخ",
     "noDescription": "لا يوجد وصف"
   },
   "status": {
@@ -30,12 +33,15 @@
   },
   "placeholder": {
     "enterTitle": "أدخل عنوان المهمة...",
-    "enterDescription": "أدخل وصف المهمة (اختياري)..."
+    "enterDescription": "أدخل وصف المهمة (اختياري)...",
+    "selectDate": "اختر التاريخ",
+    "selectDateRange": "اختر نطاق التاريخ"
   },
   "validation": {
     "titleRequired": "العنوان مطلوب",
     "titleMaxLength": "يجب أن يكون العنوان أقل من 50 حرف",
-    "descriptionMaxLength": "يجب أن يكون الوصف أقل من 200 حرف"
+    "descriptionMaxLength": "يجب أن يكون الوصف أقل من 200 حرف",
+    "endDateAfterStart": "يجب أن يكون تاريخ النهاية بعد تاريخ البداية"
   },
   "empty": {
     "noTasks": "لا توجد مهام.",

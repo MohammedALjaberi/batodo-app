@@ -17,7 +17,12 @@ interface TodoStore {
   setCurrentTask: (val: TodoStore["currentTask"]) => void;
   setInputValue: (value: string) => void;
   performSearch: (term: string) => void;
-  addTodo: (task: string, description?: string) => void;
+  addTodo: (
+    task: string,
+    description?: string,
+    startDate?: Date,
+    endDate?: Date
+  ) => void;
   removeTodo: (id: string) => void;
   updateTodo: (id: string, updates: Partial<Todo>) => void;
 }
@@ -62,7 +67,7 @@ export const useTodos = create<TodoStore>()(
 
         setOpenModal: (openModalFor) => set({ openModalFor }),
         setCurrentTask: (currentTask) => set({ currentTask }),
-        addTodo: (task, description) =>
+        addTodo: (task, description, startDate, endDate) =>
           set(() => {
             const newTodos = [
               ...get().todos,
@@ -71,6 +76,8 @@ export const useTodos = create<TodoStore>()(
                 title: task,
                 description: description || "",
                 status: "TODO" as const,
+                startDate,
+                endDate,
               },
             ];
             return { todos: newTodos };
