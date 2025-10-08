@@ -4,7 +4,7 @@ import "../i18n.config";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="batodo-ui-theme">
+    <ThemeProvider>
       <div className="bg-background min-h-screen transition-colors">
         <main>
           <TasksPage />

@@ -1,28 +1,13 @@
 import { Button } from "@/components/ui/button";
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { CustomDialog } from "@/components/ui/dialog";
+import { CustomSelect } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { CustomPopover } from "@/components/ui/popover";
+import { CustomField } from "@/components/ui/field";
 import { useTodos } from "@/store/todo.store";
-import { getStatusText } from "@/utils/todoHelpers";
-import { Dialog } from "@radix-ui/react-dialog";
-import { CalendarIcon, X } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
 
@@ -93,38 +78,40 @@ const Form = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="flex flex-col gap-3">
-        <Label htmlFor="title">{t("task.title")}</Label>
-        <Input
-          id="title"
-          placeholder={t("placeholder.enterTitle")}
-          {...register("title")}
-          autoFocus
-        />
-        {errors.title && (
-          <span className="text-sm text-red-400 -mt-1">
-            {errors.title.message}
-          </span>
-        )}
+        <CustomField
+          label={t("task.title")}
+          error={errors.title?.message}
+          required
+          htmlFor="title"
+        >
+          <Input
+            id="title"
+            placeholder={t("placeholder.enterTitle")}
+            {...register("title")}
+            autoFocus
+          />
+        </CustomField>
 
-        <Label htmlFor="description">{t("task.description")}</Label>
-        <Textarea
-          id="description"
-          placeholder={t("placeholder.enterDescription")}
-          {...register("description")}
-          rows={3}
-          className="resize-none max-h-24 overflow-y-auto"
-        />
-        {errors.description && (
-          <span className="text-sm text-red-400 -mt-1">
-            {errors.description.message}
-          </span>
-        )}
+        <CustomField
+          label={t("task.description")}
+          error={errors.description?.message}
+          htmlFor="description"
+        >
+          <Textarea
+            id="description"
+            placeholder={t("placeholder.enterDescription")}
+            {...register("description")}
+            rows={3}
+            className="resize-none max-h-24 overflow-y-auto"
+          />
+        </CustomField>
 
-        {/* Date Range Section */}
-        <div className="flex flex-col gap-2">
-          <Label>{t("task.dateRange")}</Label>
-          <Popover>
-            <PopoverTrigger asChild>
+        <CustomField
+          label={t("task.dateRange")}
+          error={errors.dateRange?.to?.message}
+        >
+          <CustomPopover
+            trigger={
               <Button
                 variant="outline"
                 className={`justify-start font-normal ${
@@ -156,64 +143,49 @@ const Form = () => {
                   <span>{t("placeholder.selectDateRange")}</span>
                 )}
               </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <Calendar
-                mode="range"
-                defaultMonth={watchedDateRange?.from}
-                selected={watchedDateRange}
-                onSelect={(range) => {
-                  if (range?.from) {
-                    setValue("dateRange", {
-                      from: range.from,
-                      to: range.to,
-                    });
-                  } else {
-                    setValue("dateRange", undefined);
-                  }
-                }}
-                numberOfMonths={1}
-                style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
-                lang={i18n.language}
-                locale={i18n.language === "ar" ? ar : undefined}
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          {errors.dateRange?.to && (
-            <span className="text-sm text-red-400">
-              {errors.dateRange.to.message}
-            </span>
-          )}
-        </div>
+            }
+            contentClassName="w-auto p-0"
+            align="start"
+          >
+            <Calendar
+              mode="range"
+              defaultMonth={watchedDateRange?.from}
+              selected={watchedDateRange}
+              onSelect={(range) => {
+                if (range?.from) {
+                  setValue("dateRange", {
+                    from: range.from,
+                    to: range.to,
+                  });
+                } else {
+                  setValue("dateRange", undefined);
+                }
+              }}
+              numberOfMonths={1}
+              style={{ direction: i18n.language === "ar" ? "rtl" : "ltr" }}
+              lang={i18n.language}
+              locale={i18n.language === "ar" ? ar : undefined}
+              initialFocus
+            />
+          </CustomPopover>
+        </CustomField>
       </div>
 
       {openModalFor === "edit" && (
-        <div>
-          <label className="text-sm font-medium text-muted-foreground">
-            {t("task.status")}
-          </label>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full justify-start">
-                {getStatusText(watchedStatus)}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuItem onClick={() => setValue("status", "TODO")}>
-                {t("status.todo")}
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => setValue("status", "IN_PROGRESS")}
-              >
-                {t("status.inProgress")}
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setValue("status", "COMPLETED")}>
-                {t("status.completed")}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
+        <CustomField label={t("task.status")}>
+          <CustomSelect
+            value={watchedStatus}
+            onValueChange={(value) =>
+              setValue("status", value as "TODO" | "IN_PROGRESS" | "COMPLETED")
+            }
+            options={[
+              { label: t("status.todo"), value: "TODO" },
+              { label: t("status.inProgress"), value: "IN_PROGRESS" },
+              { label: t("status.completed"), value: "COMPLETED" },
+            ]}
+            className="w-full justify-start"
+          />
+        </CustomField>
       )}
 
       <div className="flex justify-end">
@@ -231,31 +203,22 @@ const TaskFormModal = () => {
   const isOpen = ["edit", "new"].includes(openModalFor ?? "");
   const isNew = openModalFor === "new";
 
-  const handleDialogChange = () => {
-    setOpenModal(null);
-    setCurrentTask(null);
+  const handleDialogChange = (open: boolean) => {
+    if (!open) {
+      setOpenModal(null);
+      setCurrentTask(null);
+    }
   };
 
   return (
-    <div>
-      <Dialog open={isOpen} onOpenChange={handleDialogChange}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {isNew ? t("modal.addTask") : t("modal.editTask")}
-            </DialogTitle>
-            <button
-              onClick={handleDialogChange}
-              className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </button>
-          </DialogHeader>
-          <Form />
-        </DialogContent>
-      </Dialog>
-    </div>
+    <CustomDialog
+      open={isOpen}
+      onOpenChange={handleDialogChange}
+      title={isNew ? t("modal.addTask") : t("modal.editTask")}
+      className="sm:max-w-md"
+    >
+      <Form />
+    </CustomDialog>
   );
 };
 

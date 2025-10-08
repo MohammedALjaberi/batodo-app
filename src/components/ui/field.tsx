@@ -1,9 +1,9 @@
-import { useMemo } from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { useMemo } from "react";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
   return (
@@ -16,7 +16,7 @@ function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function FieldLegend({
@@ -36,7 +36,7 @@ function FieldLegend({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
@@ -49,7 +49,7 @@ function FieldGroup({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 const fieldVariants = cva(
@@ -74,7 +74,7 @@ const fieldVariants = cva(
       orientation: "vertical",
     },
   }
-)
+);
 
 function Field({
   className,
@@ -89,7 +89,7 @@ function Field({
       className={cn(fieldVariants({ orientation }), className)}
       {...props}
     />
-  )
+  );
 }
 
 function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
@@ -102,7 +102,7 @@ function FieldContent({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function FieldLabel({
@@ -120,7 +120,7 @@ function FieldLabel({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
@@ -133,7 +133,7 @@ function FieldTitle({ className, ...props }: React.ComponentProps<"div">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
@@ -148,7 +148,7 @@ function FieldDescription({ className, ...props }: React.ComponentProps<"p">) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function FieldSeparator({
@@ -156,7 +156,7 @@ function FieldSeparator({
   className,
   ...props
 }: React.ComponentProps<"div"> & {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }) {
   return (
     <div
@@ -178,7 +178,7 @@ function FieldSeparator({
         </span>
       )}
     </div>
-  )
+  );
 }
 
 function FieldError({
@@ -187,19 +187,19 @@ function FieldError({
   errors,
   ...props
 }: React.ComponentProps<"div"> & {
-  errors?: Array<{ message?: string } | undefined>
+  errors?: Array<{ message?: string } | undefined>;
 }) {
   const content = useMemo(() => {
     if (children) {
-      return children
+      return children;
     }
 
     if (!errors) {
-      return null
+      return null;
     }
 
     if (errors?.length === 1 && errors[0]?.message) {
-      return errors[0].message
+      return errors[0].message;
     }
 
     return (
@@ -209,11 +209,11 @@ function FieldError({
             error?.message && <li key={index}>{error.message}</li>
         )}
       </ul>
-    )
-  }, [children, errors])
+    );
+  }, [children, errors]);
 
   if (!content) {
-    return null
+    return null;
   }
 
   return (
@@ -225,7 +225,92 @@ function FieldError({
     >
       {content}
     </div>
-  )
+  );
+}
+
+// ============================================================ Custom ====================
+interface CustomFieldProps {
+  label?: string;
+  description?: string;
+  error?: string | Array<{ message?: string } | undefined>;
+  children: React.ReactNode;
+  orientation?: "vertical" | "horizontal" | "responsive";
+  className?: string;
+  required?: boolean;
+  htmlFor?: string;
+}
+
+function CustomField({
+  label,
+  description,
+  error,
+  children,
+  orientation = "vertical",
+  className,
+  required,
+  htmlFor,
+}: CustomFieldProps) {
+  return (
+    <Field orientation={orientation} className={className}>
+      {label && (
+        <FieldLabel htmlFor={htmlFor}>
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </FieldLabel>
+      )}
+      <FieldContent>
+        {children}
+        {description && <FieldDescription>{description}</FieldDescription>}
+        {error && (
+          <FieldError
+            errors={typeof error === "string" ? [{ message: error }] : error}
+          />
+        )}
+      </FieldContent>
+    </Field>
+  );
+}
+
+interface CustomInputFieldProps
+  extends Omit<React.ComponentProps<"input">, "children"> {
+  label?: string;
+  description?: string;
+  error?: string;
+  orientation?: "vertical" | "horizontal" | "responsive";
+  fieldClassName?: string;
+}
+
+function CustomInputField({
+  label,
+  description,
+  error,
+  orientation = "vertical",
+  fieldClassName,
+  className,
+  required,
+  id,
+  ...inputProps
+}: CustomInputFieldProps) {
+  return (
+    <CustomField
+      label={label}
+      description={description}
+      error={error}
+      orientation={orientation}
+      className={fieldClassName}
+      required={required}
+      htmlFor={id}
+    >
+      <input
+        id={id}
+        className={cn(
+          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+        {...inputProps}
+      />
+    </CustomField>
+  );
 }
 
 export {
@@ -239,4 +324,6 @@ export {
   FieldSet,
   FieldContent,
   FieldTitle,
-}
+  CustomField,
+  CustomInputField,
+};
