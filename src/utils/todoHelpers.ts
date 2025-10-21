@@ -10,7 +10,7 @@ const STATUS_CONFIG = {
     color: "bg-blue-100 text-blue-800 border-blue-200",
     textKey: "status.inProgress",
   },
-  COMPLETED: {
+  DONE: {
     color: "bg-green-100 text-green-800 border-green-200",
     textKey: "status.completed",
   },

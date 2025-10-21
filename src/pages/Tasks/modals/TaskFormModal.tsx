@@ -7,9 +7,10 @@ import { Calendar } from "@/components/ui/calendar";
 import { CustomPopover } from "@/components/ui/popover";
 import { CustomField } from "@/components/ui/field";
 import { useTodos } from "@/store/todo.store";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ar } from "date-fns/locale";
+import { useState } from "react";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +29,7 @@ const Form = () => {
   const setOpenModal = useTodos((s) => s.setOpenModal);
   const openModalFor = useTodos((s) => s.openModalFor);
   const isNew = openModalFor === "new";
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const taskFormSchema = createTaskFormSchema(t);
 
@@ -55,25 +57,33 @@ const Form = () => {
   const watchedStatus = watch("status");
   const watchedDateRange = watch("dateRange");
 
-  const onSubmit = (data: TaskFormData) => {
-    if (isNew) {
-      addTodo(
-        data.title,
-        data?.description,
-        data.dateRange?.from,
-        data.dateRange?.to
-      );
-    } else {
-      updateTodo(currentTask?.id ?? "", {
-        title: data.title,
-        description: data?.description,
-        status: data?.status,
-        startDate: data.dateRange?.from,
-        endDate: data.dateRange?.to,
-      });
+  const onSubmit = async (data: TaskFormData) => {
+    try {
+      setIsSubmitting(true);
+      if (isNew) {
+        await addTodo(
+          data.title,
+          data?.description,
+          data.dateRange?.from,
+          data.dateRange?.to
+        );
+      } else {
+        await updateTodo(currentTask?.id ?? "", {
+          title: data.title,
+          description: data?.description,
+          status: data?.status,
+          startDate: data.dateRange?.from,
+          endDate: data.dateRange?.to,
+        });
+      }
+      setCurrentTask(null);
+      setOpenModal(null);
+    } catch (error) {
+      // Error is handled by the store
+      console.error("Form submission error:", error);
+    } finally {
+      setIsSubmitting(false);
     }
-    setCurrentTask(null);
-    setOpenModal(null);
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -176,12 +186,12 @@ const Form = () => {
           <CustomSelect
             value={watchedStatus}
             onValueChange={(value) =>
-              setValue("status", value as "TODO" | "IN_PROGRESS" | "COMPLETED")
+              setValue("status", value as "TODO" | "IN_PROGRESS" | "DONE")
             }
             options={[
               { label: t("status.todo"), value: "TODO" },
               { label: t("status.inProgress"), value: "IN_PROGRESS" },
-              { label: t("status.completed"), value: "COMPLETED" },
+              { label: t("status.completed"), value: "DONE" },
             ]}
             className="w-full justify-start"
           />
@@ -189,7 +199,16 @@ const Form = () => {
       )}
 
       <div className="flex justify-end">
-        <Button type="submit">{t("buttons.done")}</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              {t("buttons.saving")}
+            </>
+          ) : (
+            t("buttons.done")
+          )}
+        </Button>
       </div>
     </form>
   );

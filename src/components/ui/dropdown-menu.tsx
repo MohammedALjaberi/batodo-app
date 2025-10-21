@@ -237,7 +237,7 @@ function DropdownMenuSubContent({
   );
 }
 
-// Custom DropdownMenu Component with Props API
+// ============================================================ Custom ====================
 interface CustomDropdownItem {
   label: string;
   value?: string;
@@ -301,7 +301,6 @@ function CustomDropdown({
   );
 }
 
-// =============================================================== CustomSelect =================
 interface CustomSelectProps {
   value?: string;
   onValueChange?: (value: string) => void;

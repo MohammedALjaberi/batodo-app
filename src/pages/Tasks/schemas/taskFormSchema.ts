@@ -11,7 +11,7 @@ export const createTaskFormSchema = (t: (key: string) => string) =>
       .string()
       .max(200, t("validation.descriptionMaxLength"))
       .optional(),
-    status: z.enum(["TODO", "IN_PROGRESS", "COMPLETED"]),
+    status: z.enum(["TODO", "IN_PROGRESS", "DONE"]),
     dateRange: z
       .object({
         from: z.date(),

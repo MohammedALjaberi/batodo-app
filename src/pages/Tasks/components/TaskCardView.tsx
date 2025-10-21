@@ -3,7 +3,8 @@ import { cn } from "@/lib/utils";
 import { useTodos } from "@/store/todo.store";
 import type { Todo } from "@/types";
 import { getStatusColor, getStatusText } from "@/utils/todoHelpers";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, Loader2 } from "lucide-react";
+import { useState } from "react";
 
 type TaskCardViewType = {
   todo: Todo;
@@ -13,14 +14,22 @@ const TaskCardView = ({ todo }: TaskCardViewType) => {
   const setCurrentTask = useTodos((s) => s.setCurrentTask);
   const setOpenModal = useTodos((s) => s.setOpenModal);
   const removeTodo = useTodos((s) => s.removeTodo);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleView = () => {
     setCurrentTask(todo);
     setOpenModal("view");
   };
 
-  const handleDelete = () => {
-    removeTodo(todo.id);
+  const handleDelete = async () => {
+    try {
+      setIsDeleting(true);
+      await removeTodo(todo.id);
+    } catch (error) {
+      console.error("Delete error:", error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const handleUpdate = () => {
@@ -63,9 +72,14 @@ const TaskCardView = ({ todo }: TaskCardViewType) => {
               e.stopPropagation();
               handleDelete();
             }}
+            disabled={isDeleting}
             className="h-8 w-8 p-0 hover:bg-red-100 hover:text-red-600"
           >
-            <Trash2 className="h-4 w-4" />
+            {isDeleting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Trash2 className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </div>
