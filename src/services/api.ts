@@ -9,7 +9,7 @@ import type {
 
 // Create axios instance with base configuration
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: "https://todo-be-lac.vercel.app/api",
   headers: {
     "Content-Type": "application/json",
   },
