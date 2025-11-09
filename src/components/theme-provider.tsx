@@ -12,7 +12,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     initializeTheme();
   }, [initializeTheme]);
 
-  return <>{children}</>;
+  return children;
 }
 // eslint-disable-next-line react-refresh/only-export-components
 export { useTheme } from "@/store/theme.store";

@@ -2,6 +2,10 @@
   "app": {
     "title": "My Todo App"
   },
+  "nav": {
+    "tasks": "Tasks",
+    "blogs": "Blogs"
+  },
   "search": {
     "placeholder": "Search tasks..."
   },
@@ -46,5 +50,9 @@
   "empty": {
     "noTasks": "No tasks found.",
     "getStarted": "Add a new task to get started!"
+  },
+  "blogs": {
+    "title": "Blogs",
+    "comingSoon": "Coming soon..."
   }
 }
